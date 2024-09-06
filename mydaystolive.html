@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Life in Days</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #000;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            max-width: 600px;
+            width: 100%;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .days {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+        .motivation {
+            font-style: italic;
+            margin: 1rem 0;
+        }
+        .checkboxes {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2px;
+            margin-top: 20px;
+        }
+        .checkbox {
+            width: 10px;
+            height: 10px;
+            border: 1px solid #fff;
+	    border-radius: 100%;
+            display: inline-block;
+        }
+        .checkbox.checked {
+            background-color: #e94560;
+        }
+        .legend {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+            font-size: 0.8rem;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 0 10px;
+        }
+        .legend-color {
+            width: 10px;
+            height: 10px;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Siddharth's Life in Days</h1>
+        <div id="result">
+            <p>You've lived for <span id="daysLived" class="days" style="color: red;"></span> days</p>
+            <p>You have <span id="daysRemaining" class="days" style="color: green;"></span> days left until 90</p>
+            <p class="motivation" id="motivationText"></p>
+        </div>
+        <div class="checkboxes" id="checkboxes"></div>
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color checkbox checked"></div>
+                <span>Days Lived</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color checkbox"></div>
+                <span>Days Remaining</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const daysLived = document.getElementById('daysLived');
+        const daysRemaining = document.getElementById('daysRemaining');
+        const motivationText = document.getElementById('motivationText');
+        const checkboxesContainer = document.getElementById('checkboxes');
+
+        const birthdate = new Date('2007-08-08');
+        const ninetyYearsLater = new Date(birthdate.getFullYear() + 90, birthdate.getMonth(), birthdate.getDate());
+        const totalDays = Math.floor((ninetyYearsLater - birthdate) / (1000 * 60 * 60 * 24));
+
+        const motivationalQuotes = [
+            "'Every day is a new opportunity to change your life.'",
+            "'The secret of getting ahead is getting started.'",
+            "'Your time is limited, don't waste it living someone else's life.'",
+            "'The only way to do great work is to love what you do.'",
+            "'Believe you can and you're halfway there.'",
+            "'The future belongs to those who believe in the beauty of their dreams.'",
+            "'Success is not final, failure is not fatal: it is the courage to continue that counts.'",
+            "'The best way to predict the future is to create it.'",
+            "'Don't watch the clock; do what it does. Keep going.'",
+            "'You are never too old to set another goal or to dream a new dream.'"
+        ];
+
+        function calculateDays() {
+            const today = new Date();
+            const millisecondsLived = today - birthdate;
+            const daysLivedValue = Math.floor(millisecondsLived / (1000 * 60 * 60 * 24));
+            const daysRemainingValue = totalDays - daysLivedValue;
+
+            daysLived.textContent = daysLivedValue.toLocaleString();
+            daysRemaining.textContent = daysRemainingValue.toLocaleString();
+
+            const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
+            motivationText.textContent = randomQuote;
+
+            updateCheckboxes(daysLivedValue);
+        }
+
+        function updateCheckboxes(daysLivedValue) {
+            checkboxesContainer.innerHTML = '';
+            for (let i = 0; i < totalDays; i++) {
+                const checkbox = document.createElement('div');
+                checkbox.classList.add('checkbox');
+                if (i < daysLivedValue) {
+                    checkbox.classList.add('checked');
+                }
+                checkboxesContainer.appendChild(checkbox);
+            }
+        }
+
+        calculateDays();
+        // Update every day at midnight
+        setInterval(calculateDays, 24 * 60 * 60 * 1000);
+    </script>
+</body>
+</html>
